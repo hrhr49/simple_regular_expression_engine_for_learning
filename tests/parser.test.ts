@@ -15,6 +15,9 @@ test('parser positive test', () => {
     char: 'a',
   });
 
+  expect(new Parser('()').parse()).toEqual({type: 'EMPTY'});
+  expect(new Parser('(())').parse()).toEqual({type: 'EMPTY'});
+
   expect(new Parser('ab').parse()).toEqual({
     type: 'CONCATENATION',
     left: {
@@ -44,6 +47,13 @@ test('parser positive test', () => {
     child: {
       type: 'CHARACTOR',
       char: 'a',
+    },
+  });
+
+  expect(new Parser('()*').parse()).toEqual({
+    type: 'KLEENE_STAR',
+    child: {
+      type: 'EMPTY',
     },
   });
 
@@ -159,6 +169,7 @@ test('parser positive test', () => {
       char: 'c',
     },
   });
+
 });
 
 
@@ -167,5 +178,6 @@ test('parser negative test', () => {
   expect(() => new Parser(')').parse()).toThrow();
   expect(() => new Parser('*').parse()).toThrow();
   expect(() => new Parser('|*').parse()).toThrow();
+  expect(() => new Parser('(*)').parse()).toThrow();
   expect(() => new Parser('a**').parse()).toThrow();
 });
