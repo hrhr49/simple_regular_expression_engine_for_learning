@@ -1,7 +1,4 @@
-import * as d3 from 'd3';
-import * as dagreD3 from 'dagre-d3';
-
-import './style.scss';
+// NFA(Non Deterministic Finite Automaton)
 
 // https://en.wikipedia.org/wiki/Thompson%27s_construction
 const EPSILON = 'EPSILON'
@@ -41,7 +38,7 @@ class NFAMatcher {
     this.expandEpsilon();
   }
 
-  private getNextStates = (currentState: State, alphabet: Alphabet): State[] => {
+  public getNextStates = (currentState: State, alphabet: Alphabet): State[] => {
     const stateEntry = this.nfa.transition.get(currentState);
     if (!stateEntry) {
       return [];
@@ -80,87 +77,13 @@ class NFAMatcher {
     this.expandEpsilon();
   }
 
-  public createGraph = (): any => {
-    // label(ノード内の文字)をもつグラフを作成(多重辺もOKとする)
-    var g = new dagreD3.graphlib.Graph({multigraph: true})
-    .setGraph({})
-    .setDefaultEdgeLabel(function() { return {}; });
-
-    // ノードを追加していく。
-    this.nfa.states.forEach(state => {
-      if (this.currentStates.has(state)) {
-        g.setNode(state,  {label: state, 'class': 'current-state'});
-      } else {
-        g.setNode(state,  {label: state});
-      }
-    });
-
-    // ノードはもともと長方形だがコーナーを丸くしている
-    g.nodes().forEach(function(v) {
-      var node = g.node(v);
-      node.rx = node.ry = 5;
-    });
-
-    // エッジを追加していく
-    this.nfa.states.forEach(state => {
-      this.nfa.alphabets.forEach(alphabet => {
-        this.getNextStates(state, alphabet).forEach(nextState => {
-          console.log(state, nextState, alphabet);
-          g.setEdge(state, nextState, {label: alphabet}, alphabet);
-        });
-      });
-      this.getNextStates(state, EPSILON).forEach(nextState => {
-        g.setEdge(state, nextState, {label: 'ε'});
-      });
-    });
-    return g;
-  }
+  public getStates = () => this.nfa.states;
+  public getCurrentStates = () => this.currentStates;
+  public getAlphabets = () => this.nfa.alphabets;
 }
 
-
-const renderGraph = (g: any) => {
-  // renderという関数を用意している。これが最終的に図を生成する関数
-  var render = new dagreD3.render();
-
-  // d3.select("svg");により，htmlにあるsvg要素が選択される。svgが複数ある場合は注意。その場合，svgの親要素をselectして，それにsvgをappendすればよい
-  var svg = d3.select("svg");
-
-  // svgの子要素gの部分に，グラフgをレンダー
-  render(d3.select("svg g"), g);
-
-  // svgのサイズがデフォルトのままでは見切れてしまうので大きさを調整
-  svg.attr("height", g.graph().height + 20);
-  svg.attr("width", g.graph().width + 20);
-}
-
-const nfa: NFA = {
-  states: new Set(['s1', 's2', 's3']),
-  alphabets: new Set(['a', 'b']),
-  transition: new Map([
-    [
-      's1', new Map([
-        ['a', ['s2']],
-        ['b', ['s2']],
-        [EPSILON, ['s3']],
-      ])
-    ],
-    [
-      's2', new Map([
-        ['b', ['s2']],
-      ])
-    ],
-    [
-      's3', new Map([
-        ['b', ['s3']],
-      ])
-    ],
-  ]),
-  initialState: 's1',
-  finalState: 's3',
+export {
+  NFA,
+  NFAMatcher,
+  EPSILON,
 };
-
-const matcher = new NFAMatcher(nfa);
-console.log(matcher.match(['b']));
-const g = matcher.createGraph();
-console.log(g);
-renderGraph(g);
