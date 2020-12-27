@@ -1,0 +1,21 @@
+text {
+  font-weight: 300;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  font-size: 14px;
+}
+
+.node rect {
+  stroke: #999;
+  fill: #fff;
+  stroke-width: 1px; // edgeの先の▲の大きさです
+}
+
+// 現在の状態は赤文字で表示
+.node.current-state {
+  fill: red;
+}
+
+.edgePath path {
+  stroke: #333;
+  stroke-width: 1px; // pathの太さです
+}
