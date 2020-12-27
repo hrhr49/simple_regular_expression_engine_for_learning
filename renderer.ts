@@ -13,7 +13,13 @@ const createGraphFromNFAMatcher = (matcher: NFAMatcher): any => {
 
   // label(ノード内の文字)をもつグラフを作成(多重辺もOKとする)
   var g = new dagreD3.graphlib.Graph({multigraph: true})
-    .setGraph({})
+    .setGraph({
+      nodesep: 10,
+      ranksep: 10,
+      rankdir: "TB",
+      marginx: 10,
+      marginy: 10,
+    })
     .setDefaultEdgeLabel(function () {return {};});
 
   // ノードを追加していく。

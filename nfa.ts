@@ -1,6 +1,4 @@
 // NFA(Non Deterministic Finite Automaton)
-
-// https://en.wikipedia.org/wiki/Thompson%27s_construction
 const EPSILON = 'EPSILON'
 type State = string
 type Alphabet = string
@@ -8,7 +6,7 @@ type Transition = Map<State, Map<Alphabet, State[]>>
 
 interface NFA {
   states: Set<State>
-  alphabets: Set<string>
+  alphabets: Set<Alphabet>
   transition: Transition
   initialState: State
   finalState: State
@@ -64,7 +62,7 @@ class NFAMatcher {
     this.currentStates = nextStates
   }
 
-  private transition = (alphabet: string) => {
+  private transition = (alphabet: Alphabet) => {
     const nextStates = new Set<State>();
 
     this.currentStates.forEach(state => {
@@ -86,4 +84,7 @@ export {
   NFA,
   NFAMatcher,
   EPSILON,
+  State,
+  Alphabet,
+  Transition,
 };

@@ -29,8 +29,13 @@ interface KleeneStarNode {
   child: ASTNode
 }
 
-type ASTNode =
-  EmptyNode | AlternationNode | CharacterNode | ConcatenationNode | KleeneStarNode;
+type ASTNode = (
+    EmptyNode
+  | AlternationNode
+  | CharacterNode
+  | ConcatenationNode
+  | KleeneStarNode
+);
 
 class Parser {
   src: string
@@ -127,4 +132,5 @@ ${posStr}
 
 export {
   Parser,
+  ASTNode,
 };
