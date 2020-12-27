@@ -1,5 +1,5 @@
-// Create NFA by 'Tompson Construction' algorithm.
-// https://en.wikipedia.org/wiki/Thompson%27s_construction
+// Create NFA(Nondeterministic Finite Automaton) by 'Tompson Construction' algorithm.
+// Reference: https://en.wikipedia.org/wiki/Thompson%27s_construction
 import {
   NFA,
   NFAMatcher,
@@ -18,6 +18,15 @@ const uuid = (): State => `${tmpId++}`;
 const constructNFA = (node: ASTNode, alphabets: Set<Alphabet>): NFA => {
   switch (node.type) {
     case 'EMPTY': case 'CHARACTOR': {
+      //   case 'EMPTY'
+      //   +------+  epsilon   +-----+
+      //   | init | ---------> | fin |
+      //   +------+            +-----+
+      //
+      //   case 'CHARACTOR'
+      //   +------+  char   +-----+
+      //   | init | ------> | fin |
+      //   +------+         +-----+
       const alphabet = node.type === 'EMPTY' ? EPSILON : node.char;
       const initialState = uuid();
       const finalState = uuid();
@@ -36,6 +45,12 @@ const constructNFA = (node: ASTNode, alphabets: Set<Alphabet>): NFA => {
       };
     }
     case 'ALTERNATION': {
+      //   +------+  eps  +------+  eps  +------+
+      //   |      |------>| nfa1 |------>|      |
+      //   | init |       +------+       | fin  |
+      //   |      |  eps  +------+  eps  |      |
+      //   |      |------>| nfa2 |------>|      |
+      //   +------+       +------+       +------+
       const initialState = uuid();
       const left = constructNFA(node.left, alphabets);
       const right = constructNFA(node.right, alphabets);
@@ -74,6 +89,9 @@ const constructNFA = (node: ASTNode, alphabets: Set<Alphabet>): NFA => {
       };
     }
     case 'CONCATENATION': {
+      //  +-----------+     +---------------------+     +----------+
+      //  | nfa1_init | --> | nfa1_fin, nfa2_init | --> | nfa2_fin |
+      //  +-----------+     +---------------------+     +----------+
       const left = constructNFA(node.left, alphabets);
       const right = constructNFA(node.right, alphabets);
       const initialState = left.initialState;
@@ -101,6 +119,14 @@ const constructNFA = (node: ASTNode, alphabets: Set<Alphabet>): NFA => {
       };
     }
     case 'KLEENE_STAR': {
+      //            eps
+      //     +------------------------------------------------------+
+      //     |                                                      v
+      //   +------+  eps   +----------+        +---------+  eps   +-----+
+      //   | init | -----> | nfa_init | -----> | nfa_fin | -----> | fin |
+      //   +------+        +----------+        +---------+        +-----+
+      //                     ^          eps      |
+      //                     +-------------------+
       const initialState = uuid();
       const child = constructNFA(node.child, alphabets);
       const finalState = uuid();

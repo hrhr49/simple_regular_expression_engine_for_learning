@@ -1,4 +1,38 @@
-// NFA(Non Deterministic Finite Automaton)
+// NFA(Nondeterministic Finite Automaton)
+//
+// NFA Example
+//                        b
+//                    +---------------------+
+//                    |                     v
+// +---------+  a   +---+  b   +---+  a   +--------+
+// | 0(init) | ---> | 1 | ---> | 2 | ---> | 3(fin) |
+// +---------+      +---+      +---+      +--------+
+//                    ^   eps    |
+//                    +----------+
+//
+// states = new Set(['0', '1', '2', '3'])
+// alphabets = new Set(['a', 'b'])
+// transition = new Map([
+//   [
+//     '0', new Map([
+//       ['a', ['1']],
+//     ]),
+//   ],
+//   [
+//     '1', new Map([
+//       ['b', ['2', '3']],
+//     ]),
+//   ],
+//   [
+//     '2', new Map([
+//       ['a', ['3']],
+//       [EPSILON, ['1']],
+//     ]),
+//   ],
+// ])
+// initialState = '0'
+// finalState = '3'
+
 const EPSILON = 'EPSILON'
 type State = string
 type Alphabet = string
