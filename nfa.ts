@@ -23,7 +23,12 @@ class NFAMatcher {
     this.initialize();
   }
 
-  match = (target: Alphabet[]): boolean => {
+  public match = (target: string): boolean => {
+    const alphabets: Alphabet[] = target.split('');
+    return this._match(alphabets);
+  }
+
+  private _match = (target: Alphabet[]): boolean => {
     this.initialize();
     target.forEach(alphabet => {
       this.transition(alphabet);
@@ -77,6 +82,8 @@ class NFAMatcher {
 
   public getStates = () => this.nfa.states;
   public getCurrentStates = () => this.currentStates;
+  public getInitialState = () => this.nfa.initialState;
+  public getFinalState = () => this.nfa.finalState;
   public getAlphabets = () => this.nfa.alphabets;
 }
 

@@ -9,26 +9,43 @@ import {
 const createGraphFromNFAMatcher = (matcher: NFAMatcher): any => {
   const states = matcher.getStates();
   const currentStates = matcher.getCurrentStates();
+  const initialState = matcher.getInitialState();
+  const finalState = matcher.getFinalState();
   const alphabets = matcher.getAlphabets();
 
   // label(ノード内の文字)をもつグラフを作成(多重辺もOKとする)
   var g = new dagreD3.graphlib.Graph({multigraph: true})
     .setGraph({
-      nodesep: 10,
-      ranksep: 10,
-      rankdir: "TB",
+      nodesep: 6,
+      ranksep: 8,
+      rankdir: "LR",
       marginx: 10,
       marginy: 10,
     })
     .setDefaultEdgeLabel(function () {return {};});
 
   // ノードを追加していく。
+  console.log({initialState, finalState});
   states.forEach(state => {
+    let classList: string[] = [];
+    let label = state;
+    let style = '';
+
     if (currentStates.has(state)) {
-      g.setNode(state, {label: state, 'class': 'current-state'});
-    } else {
-      g.setNode(state, {label: state});
+      // label += '*'
+      style += 'fill: coral';
     }
+    if (state === initialState) {
+      label += '\n(init)'
+      // style += 'stroke: red';
+    }
+    if (state === finalState) {
+      label += '\n(fin)'
+      // style += 'stroke: blue';
+    }
+    console.log(state);
+    console.log(classList);
+    g.setNode(state, {label: label, 'class': classList.join(' '), style, shape: 'circle'});
   });
 
   // ノードはもともと長方形だがコーナーを丸くしている

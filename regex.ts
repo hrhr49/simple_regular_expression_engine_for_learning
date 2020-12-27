@@ -13,7 +13,7 @@ import {
 } from './parser';
 
 let tmpId = 0;
-const uuid = (): State => `s${tmpId++}`;
+const uuid = (): State => `${tmpId++}`;
 
 const constructNFA = (node: ASTNode, alphabets: Set<Alphabet>): NFA => {
   switch (node.type) {
@@ -74,23 +74,19 @@ const constructNFA = (node: ASTNode, alphabets: Set<Alphabet>): NFA => {
       };
     }
     case 'CONCATENATION': {
-      // NOTE:
-      // instead of merging left.finalState and right.initialState,
-      // connect left.finalState and right.initialState by
-      // EPSILON arrow for implementaion convenience,
       const left = constructNFA(node.left, alphabets);
       const right = constructNFA(node.right, alphabets);
       const initialState = left.initialState;
       const finalState = right.finalState;
 
+      // remove right.initialState and replace to left.finalState
+      right.transition.set(left.finalState, right.transition.get(right.initialState));
+      right.transition.delete(right.initialState);
+      right.states.delete(right.initialState);
+
       const transition = new Map([
         ...Array.from(left.transition.entries()),
         ...Array.from(right.transition.entries()),
-        [
-          left.finalState, new Map([
-            [EPSILON, [right.initialState]]
-          ])
-        ],
       ]);
       const states = new Set([
         ...Array.from(left.states),
@@ -113,7 +109,7 @@ const constructNFA = (node: ASTNode, alphabets: Set<Alphabet>): NFA => {
         ...Array.from(child.transition.entries()),
         [
           initialState, new Map([
-            [EPSILON, [child.initialState]]
+            [EPSILON, [child.initialState, finalState]]
           ])
         ],
         [

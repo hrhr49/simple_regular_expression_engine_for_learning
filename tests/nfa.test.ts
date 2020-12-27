@@ -32,8 +32,8 @@ const nfa: NFA = {
 
 test('ok', () => {
   const matcher = new NFAMatcher(nfa);
-  expect(matcher.match(['a'])).toBe(false);
-  expect(matcher.match(['b'])).toBe(true);
-  expect(matcher.match(['b', 'b'])).toBe(true);
-  expect(matcher.match([])).toBe(true);
+  expect(matcher.match('a')).toBe(false);
+  expect(matcher.match('b')).toBe(true);
+  expect(matcher.match('bb')).toBe(true);
+  expect(matcher.match('')).toBe(true);
 });
