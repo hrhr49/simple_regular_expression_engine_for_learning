@@ -30,6 +30,25 @@ test('parser positive test', () => {
     },
   });
 
+  expect(new Parser('abc').parse()).toEqual({
+    type: 'CONCATENATION',
+    left: {
+      type: 'CONCATENATION',
+      left: {
+        type: 'CHARACTOR',
+        char: 'a',
+      },
+      right: {
+        type: 'CHARACTOR',
+        char: 'b',
+      }
+    },
+    right: {
+      type: 'CHARACTOR',
+      char: 'c',
+    },
+  });
+
   expect(new Parser('a|b').parse()).toEqual({
     type: 'ALTERNATION',
     left: {

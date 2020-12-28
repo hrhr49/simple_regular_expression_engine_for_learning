@@ -48,26 +48,25 @@ class Parser {
 
   private curChar = (): string => this.src.charAt(this.pos);
   private isEnd = (): boolean => this.pos >= this.src.length;
+
+  private createErrorMessage = (msg: string) => {
+    let posStr = Array(this.src.length).fill(null)
+      .map((_, i) => i === this.pos ? '^' : ' ').join('');
+    return `${msg}\n${this.src}\n${posStr}\n`;
+  }
+
   private consume = (char: string) => {
     if (this.curChar() === char) {
       this.pos++;
     } else {
-      let posStr = '';
-      for (let i = 0; i < this.src.length; i++) {
-        posStr += i === this.pos ? '^' : ' ';
-      }
-      throw `\
-${char} is expected at ${this.pos}
-${this.src}
-${posStr}
-`
+      throw this.createErrorMessage(`'${char}' is expected`);
     }
   }
 
   public parse = (): ASTNode => {
     const r = this.parseAlternation();
     if (!this.isEnd()) {
-        throw `Cannot accept character ${this.curChar()} at ${this.pos}`;
+        throw this.createErrorMessage(`Cannot accept character ${this.curChar()}`);
     }
     return r;
   }
@@ -88,7 +87,7 @@ ${posStr}
   private parseConcatenation = (): ASTNode => {
     let left = this.parseKleeneStar();
     while (!this.isEnd() && !['|', '*', ')'].includes(this.curChar())) {
-      const right = this.parseConcatenation();
+      const right = this.parseKleeneStar();
       left = {
         type: 'CONCATENATION',
         left, right,
@@ -105,6 +104,10 @@ ${posStr}
         type: 'KLEENE_STAR',
         child,
       }
+      // cannot repeat '*' itself.
+      if (!this.isEnd() && this.curChar() === '*') {
+        throw this.createErrorMessage(`'*' is invalid. Nothing to repeat`);
+      }
     }
     return child;
   }
@@ -117,6 +120,8 @@ ${posStr}
       const r = this.parseAlternation();
       this.consume(')')
       return r;
+    } else if (this.curChar() === '*') {
+      throw this.createErrorMessage(`'*' is invalid. Nothing to repeat`);
     } else if (!['*', '|', '(', ')'].includes(this.curChar())) {
       const char =  this.curChar();
       this.consume(char);
@@ -125,7 +130,7 @@ ${posStr}
         char,
       };
     } else {
-      throw `character '${this.curChar()}' is invalid`;
+      throw this.createErrorMessage(`character '${this.curChar()}' is invalid`);
     }
   }
 }
