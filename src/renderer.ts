@@ -56,7 +56,7 @@ const createGraphFromNFAMatcher = (matcher: NFAMatcher): any => {
 const renderGraph = (g: any) => {
   var render = new dagreD3.render();
   var svg = d3.select("svg");
-  render(d3.select("svg g"), g);
+  render(d3.select("svg"), g);
 
   // resize for visibility
   svg.attr("height", g.graph().height + 20);

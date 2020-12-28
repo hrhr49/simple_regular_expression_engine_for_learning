@@ -28,7 +28,7 @@ let pos = 0;
 let inputText = '';
 
 const clearGraph = () => {
-  const svg = document.querySelector('svg g');
+  const svg = document.querySelector('svg');
   svg.childNodes.forEach(child => {
     svg.removeChild(child);
   });

@@ -11,7 +11,9 @@ This repository is created for only learning use. So, feature of this regular ex
 
 ## Demo
 
-TODO
+Demo to understand conversion from regular expression to NFA.
+
+TODO: URL
 
 ## Author
 
