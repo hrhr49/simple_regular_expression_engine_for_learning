@@ -35,7 +35,6 @@ const clearGraph = () => {
 };
 
 const clearInputState = () => {
-  console.log('clearInputState')
   pos = 0;
   inputTextStateElem.innerHTML = '';
 };
@@ -139,15 +138,9 @@ const showResult = () => {
 const setTextState = () => {
   inputTextStateElem.innerHTML = '';
   for (let i = 0; i < inputText.length; i++) {
-    if (i === pos) {
-      const b = document.createElement('b');
-      b.textContent = inputText.charAt(i);
-      inputTextStateElem.appendChild(b);
-    } else {
-      const span = document.createElement('span');
-      span.textContent = inputText.charAt(i);
-      inputTextStateElem.appendChild(span);
-    }
+    const el = document.createElement(i === pos ? 'b' : 'span');
+    el.textContent = inputText.charAt(i);
+    inputTextStateElem.appendChild(el);
   }
 };
 

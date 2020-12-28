@@ -50,9 +50,7 @@ class NFAMatcher {
   private currentStates: Set<State>
   private nfa: NFA
 
-  constructor(
-    nfa: NFA
-  ) {
+  constructor(nfa: NFA) {
     this.nfa = nfa;
     this.initialize();
   }
