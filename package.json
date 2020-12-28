@@ -1,7 +1,7 @@
 {
   "scripts": {
     "serve": "parcel serve index.html",
-    "build": "parcel build --target browser index.html",
+    "build": "parcel build --target browser --out-dir docs index.html",
     "test": "jest"
   },
   "devDependencies": {
