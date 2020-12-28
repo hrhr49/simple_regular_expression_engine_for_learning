@@ -67,10 +67,14 @@ class NFAMatcher {
     target.forEach(alphabet => {
       this.transition(alphabet);
     });
+    return this.isAccepted();
+  }
+
+  public isAccepted = (): boolean => {
     return this.currentStates.has(this.nfa.finalState);
   }
 
-  private initialize = () => {
+  public initialize = () => {
     this.currentStates = new Set<State>([this.nfa.initialState]);
     this.expandEpsilon();
   }
@@ -101,7 +105,7 @@ class NFAMatcher {
     this.currentStates = nextStates
   }
 
-  private transition = (alphabet: Alphabet) => {
+  public transition = (alphabet: Alphabet) => {
     const nextStates = new Set<State>();
 
     this.currentStates.forEach(state => {

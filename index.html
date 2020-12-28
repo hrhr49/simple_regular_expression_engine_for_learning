@@ -10,12 +10,15 @@
 
 <body>
   <h2>Regular Expression to NFA(Nondeterministic Finite Automaton)</h2>
+  regular expression: <br />
   <input type="text" id="regex-text"></input>
+  <pre><div id="msg"></div></pre>
+  input text: <br />
   <input type="text" id="input-text"></input>
   <div id="input-text-msg"></div>
-  <pre>
-  <div id="msg"></div>
-  </pre>
+  <div id="input-text-state"></div>
+  <input type="button" id="reset" value="reset" />
+  <input type="button" id="step" value="step" />
   <div>
     <svg>
       <g />
