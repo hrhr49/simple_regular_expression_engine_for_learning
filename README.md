@@ -13,7 +13,13 @@ This repository is created for only learning use. So, feature of this regular ex
 
 Demo to understand conversion from regular expression to NFA.
 
-TODO: URL
+Demo URL: https://simple-regex-to-nfa-example-1212.netlify.app/
+
+![demo-page](img/demo-page.png)
+
+
+NOTE:
+[dagrejs/dagre-d3](https://github.com/dagrejs/dagre-d3) is used to generate the graph in the image.
 
 ## Author
 
