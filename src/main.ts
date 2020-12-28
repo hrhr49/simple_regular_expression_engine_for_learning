@@ -8,7 +8,7 @@ import {
 import {
   NFAMatcher,
 } from './nfa';
-import './style.scss';
+import '../style.scss';
 
 const regexTextElem = document.getElementById('regex-text');
 const inputTextElem = document.getElementById('input-text');

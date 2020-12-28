@@ -1,6 +1,6 @@
 import {
   compileRegex
-} from '../regex';
+} from '../src/regex';
 
 test('regex test', () => {
   expect(compileRegex('').match('')).toBe(true);

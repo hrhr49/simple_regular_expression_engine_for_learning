@@ -2,7 +2,7 @@ import {
   NFA,
   NFAMatcher,
   EPSILON,
-} from '../nfa';
+} from '../src/nfa';
 
 const nfa: NFA = {
   states: new Set(['s1', 's2', 's3']),

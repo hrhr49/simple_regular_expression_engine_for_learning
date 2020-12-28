@@ -1,6 +1,6 @@
 import {
   Parser,
-} from '../parser';
+} from '../src/parser';
 
 test('parser positive test', () => {
   expect(new Parser('').parse()).toEqual({type: 'EMPTY'});
